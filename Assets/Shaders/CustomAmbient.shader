@@ -7,7 +7,7 @@ Shader "Custom/CustomAmbient" {
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
 
-		_OcclusionPosition("Occlusion pos", Vector) = (0,0,0,0)
+		//_OcclusionPosition("Occlusion pos", Vector) = (0,0,0,0)
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -80,8 +80,8 @@ Shader "Custom/CustomAmbient" {
 			o.Alpha = c.a;
 
 			// debug occlusion
-			//o.Albedo = IN.color.a;
-			//o.Emission = IN.color.a;
+			o.Albedo = IN.color.a;
+			o.Emission = IN.color.a;
 			// end debug occlusion
 		}
 		ENDCG
