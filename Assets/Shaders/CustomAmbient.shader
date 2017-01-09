@@ -22,6 +22,7 @@ Shader "Custom/CustomAmbient" {
 
 		sampler2D _MainTex;
 		half4 _OcclusionPosition;
+		half _OcclusionMinRadius;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -36,9 +37,11 @@ Shader "Custom/CustomAmbient" {
 			float3 wPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 
 			// calculate occlusion per vertex as distance position
-			float r = _OcclusionPosition.w;
-			r = clamp(r, 0.0001, 10000);
-			o.color.a = length(_OcclusionPosition - wPos) / r;
+			float maxR = _OcclusionPosition.w;
+			float minR = _OcclusionMinRadius;
+			maxR = clamp(maxR, 0.0001, 100000);
+			float l = length(_OcclusionPosition - wPos);
+			o.color.a =   ((-minR + l) / (maxR - minR));
 
 			o.color.a = saturate(o.color.a);
 
@@ -80,8 +83,8 @@ Shader "Custom/CustomAmbient" {
 			o.Alpha = c.a;
 
 			// debug occlusion
-			o.Albedo = IN.color.a;
-			o.Emission = IN.color.a;
+			//o.Albedo = IN.color.a;
+			//o.Emission = IN.color.a;
 			// end debug occlusion
 		}
 		ENDCG

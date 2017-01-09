@@ -6,7 +6,7 @@ using UnityEngine;
 public class OcclusionHandler : MonoBehaviour
 {
 
-    public Transform point;
+    public Occluder point;
 
 
     void Update()
@@ -15,8 +15,12 @@ public class OcclusionHandler : MonoBehaviour
 
         if (point)
         {
-            Vector4 v4 = new Vector4(point.position.x, point.position.y, point.position.z, 10);
+            Vector3 p = point.transform.position;
+            Vector4 v4 = new Vector4(p.x, p.y, p.z, point.maxRadius);
+
+            // pass values to shader
             Shader.SetGlobalVector("_OcclusionPosition", v4);
+            Shader.SetGlobalFloat("_OcclusionMinRadius", point.minRadius);
         }
     }
 }
