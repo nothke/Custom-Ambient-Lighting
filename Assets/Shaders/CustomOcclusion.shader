@@ -47,6 +47,10 @@ Shader "Custom/CustomOcclusion" {
 					float l = length(_OcclusionPositions[i] - wPos);
 					float occ = (-minR + l) / (maxR - minR);
 
+					// added inverse square for softer, less linear occ
+					// possibly expensive, comment if it is
+					occ = 1 - (sqrt(1 - occ));
+
 					o.color.a = min(occ, o.color.a);
 				}
 
