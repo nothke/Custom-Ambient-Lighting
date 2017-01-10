@@ -1,20 +1,17 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-Shader "Custom/CustomAmbient" {
+﻿
+Shader "Custom/CustomOcclusion" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-
-		//_OcclusionPosition("Occlusion pos", Vector) = (0,0,0,0)
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
 		LOD 200
 		
 		CGPROGRAM
-		#pragma   surface surf Standard fullforwardshadows vertex:vert // noambient
+		#pragma   surface surf Standard fullforwardshadows vertex:vert
 
 		#pragma target 3.0
 
@@ -42,32 +39,12 @@ Shader "Custom/CustomAmbient" {
 			maxR = clamp(maxR, 0.0001, 100000);
 			float l = length(_OcclusionPosition - wPos);
 			o.color.a = (-minR + l) / (maxR - minR);
-			//o.color.a = (min)
 
 			// debug
 			//if (o.color.a < 1) o.color.a = 0;
 
 			o.color.a = saturate(o.color.a);
-
-			// v.vertex.xyz += v.normal * 1;
 		}
-
-		inline half4 LightingStandardDefaultGI(SurfaceOutputStandard s, half3 viewDir, UnityGI gi)
-		{
-			return LightingStandard(s, viewDir, gi);
-		}
-
-		inline void LightingStandardDefaultGI_GI(
-			SurfaceOutputStandard s,
-			UnityGIInput data,
-			inout UnityGI gi)
-		{
-			LightingStandard_GI(s, data, gi);
-			
-			gi.light.color = 0;
-		}
-
-
 
 		half _Glossiness;
 		half _Metallic;
