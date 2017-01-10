@@ -6,21 +6,34 @@ using UnityEngine;
 public class OcclusionHandler : MonoBehaviour
 {
 
-    public Occluder point;
+    public Occluder[] points;
 
+    Vector4[] posArray = new Vector4[64];
+    Vector4[] dataArray = new Vector4[64];
+
+    private void Awake()
+    {
+
+    }
 
     void Update()
     {
+        if (points == null) return;
 
-
-        if (point)
+        if (points.Length != 0)
         {
-            Vector3 p = point.transform.position;
-            Vector4 v4 = new Vector4(p.x, p.y, p.z, point.maxRadius);
+            for (int i = 0; i < points.Length; i++)
+            {
+                Vector3 p = points[i].transform.position;
 
-            // pass values to shader
-            Shader.SetGlobalVector("_OcclusionPosition", v4);
-            Shader.SetGlobalFloat("_OcclusionMinRadius", point.minRadius);
+                posArray[i] = new Vector3(p.x, p.y, p.z);
+                dataArray[i] = new Vector3(points[i].minRadius, points[i].maxRadius, 0);
+            }
         }
+
+        // pass values to shader
+        Shader.SetGlobalInt("_OcclusionPointsLength", points.Length);
+        Shader.SetGlobalVectorArray("_OcclusionPositions", posArray);
+        Shader.SetGlobalVectorArray("_OcclusionData", dataArray);
     }
 }
