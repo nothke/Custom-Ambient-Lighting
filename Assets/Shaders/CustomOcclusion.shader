@@ -72,15 +72,14 @@ Shader "Custom/CustomOcclusion" {
 
 				o.Occlusion = IN.color.a;
 
-				//o.Albedo += 0.4;
 				o.Metallic = _Metallic;
 				o.Smoothness = _Glossiness;
 				o.Alpha = c.a;
 
-				// debug occlusion
+				// DEBUG occlusion with black and white:
 				//o.Albedo = IN.color.a;
 				//o.Emission = IN.color.a;
-				// end debug occlusion
+				// end DEBUG occlusion
 			}
 			ENDCG
 		}
